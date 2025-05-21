@@ -1,0 +1,101 @@
+---
+title: "Trabajo de Procesamiento de Datos: Astrocartografía"
+format: html
+toc: true
+toc-depth: 2
+---
+
+# Introducción
+
+Este sitio web presenta un análisis de un conjunto de datos astrocartográficos, basado en la carta astrocartográfica personal correspondiente a la fecha y lugar de nacimiento del autor. La astrocartografía es una técnica que relaciona la posición de los planetas con ubicaciones geográficas específicas, y se utiliza para identificar posibles influencias simbólicas en distintos lugares del planeta.
+
+La importancia de este análisis radica en la aplicación de técnicas de procesamiento de datos geoespaciales y visualización interactiva, competencias fundamentales para la carrera de Geografía.
+
+# Descripción del conjunto de datos
+
+El conjunto de datos contiene información sobre las líneas planetarias más relevantes, identificadas a partir de la carta astrocartográfica personal. Para cada línea, se registran las siguientes variables: planeta, tipo de línea, ciudad, país, latitud, longitud y continente.
+
+Estos datos permiten relacionar fenómenos simbólicos con ubicaciones geográficas concretas, abriendo posibilidades para análisis espaciales y culturales.
+
+# Variables principales
+
+-   **planeta**: Nombre del planeta cuya línea pasa por una ubicación geográfica.\
+-   **tipo_linea**: Tipo de línea astrocartográfica (Ascendente, Descendente, Medio Cielo o Fondo del Cielo).\
+-   **ciudad**: Ciudad por donde pasa la línea planetaria.\
+-   **pais**: País de la ciudad.\
+-   **latitud** y **longitud**: Coordenadas geográficas en grados decimales.\
+-   **continente**: Continente donde se ubica la ciudad.
+
+# Preguntas a resolver
+
+Con este análisis se busca responder las siguientes preguntas:
+
+1.  ¿Cómo se distribuyen las líneas planetarias por continente y qué patrones espaciales se pueden identificar?\
+2.  ¿Qué tipo de línea es más común en ciertas regiones y qué significado simbólico podría tener?\
+3.  ¿Existen concentraciones de líneas planetarias en ciudades que podrían relacionarse con factores culturales o sociales?
+
+# Hipervínculo útil
+
+Podés explorar cartas natales y astrocartografía en sitios como [Astro.com](https://www.astro.com/).
+
+# Imagen de ejemplo
+
+![Ejemplo de mapa de astrocartografía](astrocartografía-en-planisferio-terrestre)
+
+# Análisis de los gráficos
+
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+
+astro_data <- tibble(
+  planeta = c("Sol", "Luna", "Venus", "Marte", "Júpiter", "Saturno", "Mercurio"),
+  tipo_linea = c("Ascendente", "Medio Cielo", "Descendente", "Ascendente", "Medio Cielo", "Descendente", "Ascendente"),
+  ciudad = c("San José", "Ciudad de México", "Miami", "Bogotá", "Madrid", "Buenos Aires", "San Francisco"),
+  pais = c("Costa Rica", "México", "Estados Unidos", "Colombia", "España", "Argentina", "Estados Unidos"),
+  latitud = c(9.93, 19.43, 25.76, 4.61, 40.42, -34.60, 37.77),
+  longitud = c(-84.08, -99.13, -80.19, -74.08, -3.70, -58.38, -122.42),
+  continente = c("América", "América", "América", "América", "Europa", "América", "América")
+)
+```
+
+# Gráfico 1: Distribución de planetas por continente
+```{r}
+g1 <- ggplot(astro_data, aes(x = longitud, y = latitud, color = planeta, size = tipo_linea)) +
+  geom_point(alpha = 0.7) +
+  labs(
+    title = "Ubicación geográfica de líneas planetarias",
+    x = "Longitud",
+    y = "Latitud",
+    color = "Planeta",
+    size = "Tipo de línea"
+  ) +
+  theme_minimal()
+
+ggplotly(g1)
+```
+
+
+# Gráfico 2:  Distribución de planetas por continente
+
+
+```{r}
+g2 <- ggplot(astro_data, aes(x = tipo_linea, fill = planeta)) +
+  geom_bar(position = "stack", width = 0.6) +
+  labs(
+    title = "Cantidad de líneas por tipo y planeta",
+    x = "Tipo de línea",
+    y = "Total",
+    fill = "Planeta"
+  ) +
+theme_minimal()
+
+ggplotly(g2)
+
+```
+
+
+# Conclusión
+
+Este trabajo demuestra cómo se pueden estructurar datos con componentes geoespaciales, incluso desde fuentes poco convencionales como la astrología. Aunque este análisis es exploratorio, podría ser un punto de partida para comparaciones culturales, percepción territorial y estudios simbólicos en geografía.
